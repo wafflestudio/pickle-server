@@ -39,6 +39,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     "user",
     "post",
+    "challenge",
 ]
 
 AUTH_USER_MODEL = "user.User"
