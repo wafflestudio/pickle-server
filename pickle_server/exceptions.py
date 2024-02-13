@@ -24,7 +24,7 @@ class APIError(Exception):
         return self.detail
 
 
-class ResponseDTO(Schema):
+class ErrorResponseSchema(Schema):
     success: bool
     error_type: Optional[str] = None
     detail: Optional[str] = ""
@@ -63,7 +63,7 @@ def api_exception_response(request, exc):
     elif isinstance(exc, AuthenticationError):
         status_code = 401
 
-    response = ResponseDTO(
+    response = ErrorResponseSchema(
         success=False,
         error_type=error_type,
         detail=error_msg,

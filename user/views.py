@@ -49,8 +49,7 @@ def post_login(request, params: UserLoginSchema, response: HttpResponse):
     user = authenticate(request, email=params.email, password=params.password)
     if user is not None:
         login(request, user)
-        response.set_cookie("sessionid", request.session.session_key)
-        return response
+        return user
     else:
         raise AuthenticationError("Invalid password")
 
@@ -58,11 +57,10 @@ def post_login(request, params: UserLoginSchema, response: HttpResponse):
 @router.post("/logout")
 def post_logout(request, response: HttpResponse):
     logout(request)
-    response.delete_cookie("sessionid")
     return None
 
 
-@router.get("/user", response={200: UserSchema})
-def get_user(request):
+@router.get("/me", response={200: UserSchema})
+def get_user_me(request):
     return request.user
 
