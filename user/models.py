@@ -12,3 +12,4 @@ class User(AbstractUser):
     REQUIRED_FIELDS = ["username"]
 
     email = models.EmailField(_("email address"), unique=True)
+    profile_image_url = models.URLField(_("profile image url"), null=True)
