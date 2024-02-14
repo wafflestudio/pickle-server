@@ -25,7 +25,10 @@ class UserLikesPost(models.Model):
     created_at = models.DateTimeField(auto_now_add=True)
 
     class Meta:
-        unique_together = ["user", "post"]
+        constraints = [
+            models.UniqueConstraint(fields=["user", "post"], name='%(app_label)s_%(class)s_unique_user_post')
+        ]
+        
 
     def __str__(self):
         return f"{self.user} likes {self.post}"

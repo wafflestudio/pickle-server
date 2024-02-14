@@ -33,7 +33,11 @@ class UserAcceptChallenge(models.Model):
     end_time = models.DateTimeField()
 
     class Meta:
-        unique_together = ["user", "challenge"]
+        constraints = [
+            models.UniqueConstraint(fields=["user", "challenge"], name='%(app_label)s_%(class)s_unique_user_challenge')
+        ]
+        
+        
 
     def __str__(self):
         return f"{self.user} accepted {self.challenge}"
