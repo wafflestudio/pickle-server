@@ -11,7 +11,7 @@ api.add_router("user/", user_router)
 """
 """
 
-from pickle_server.exceptions import api_exception_response
+from seeya_server.exceptions import api_exception_response
 
 if not settings.DEBUG:
 
