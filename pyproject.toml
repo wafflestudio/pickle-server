@@ -1,5 +1,5 @@
 [tool.poetry]
-name = "pickle-server"
+name = "seeya-server"
 version = "0.1.0"
 description = ""
 authors = ["최병욱 <esc5221@gmail.com>", "Minkyu Lee <whizkyu@snu.ac.kr>"]
