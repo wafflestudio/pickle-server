@@ -6,7 +6,7 @@ User = get_user_model()
 
 class Post(models.Model):
     text = models.TextField(blank=True)
-    image_link = models.URLField()
+    image = models.ImageField(upload_to="post_images", blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
@@ -26,9 +26,10 @@ class UserLikesPost(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "post"], name='%(app_label)s_%(class)s_unique_user_post')
+            models.UniqueConstraint(
+                fields=["user", "post"], name="%(app_label)s_%(class)s_unique_user_post"
+            )
         ]
-        
 
     def __str__(self):
         return f"{self.user} likes {self.post}"
