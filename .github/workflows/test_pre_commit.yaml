@@ -22,10 +22,12 @@ jobs:
           cache: poetry
 
       - name: Install poetry
-        uses: pip install poetry
+        run: pip install poetry
 
       - name: Install dependencies
-        run: poetry install
+        run: |
+          poetry env use 3.11
+          poetry install --no-root
 
       - name: Install pre-commit
         run: pip install pre-commit
