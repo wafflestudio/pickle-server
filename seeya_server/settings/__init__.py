@@ -1,10 +1,14 @@
+import logging
 import os
 
 from dotenv import load_dotenv
 
+logger = logging.getLogger(__name__)
+
 load_dotenv()
 
 ENV = os.getenv("SEEYA_ENV", "local")
+logger.info(f"Loading settings for environment: {ENV}")
 
 match ENV:
     case "local":

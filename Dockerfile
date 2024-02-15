@@ -43,4 +43,4 @@ ENV SEEYA_ENV=${SEEYA_ENV} \
     SEEYA_DB_HOST=${SEEYA_DB_HOST} \
     SEEYA_DB_PORT=${SEEYA_DB_PORT}
 
-CMD ["uvicorn", "seeya_server.asgi:application", "--host", "0.0.0.0", "--port", "8080"]
+CMD ["uvicorn", "seeya_server.asgi:application", "--host", "0.0.0.0", "--port", "8080", "--log-config", "log.${SEEYA_ENV}.ini"]
