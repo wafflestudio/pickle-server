@@ -29,4 +29,18 @@ COPY seeya_server ./seeya_server
 
 EXPOSE 8080
 
+ARG SEEYA_ENV=prod \
+    SEEYA_DB_NAME \
+    SEEYA_DB_USER \
+    SEEYA_DB_PASSWORD \
+    SEEYA_DB_HOST \
+    SEEYA_DB_PORT
+
+ENV SEEYA_ENV=${SEEYA_ENV} \
+    SEEYA_DB_NAME=${SEEYA_DB_NAME} \
+    SEEYA_DB_USER=${SEEYA_DB_USER} \
+    SEEYA_DB_PASSWORD=${SEEYA_DB_PASSWORD} \
+    SEEYA_DB_HOST=${SEEYA_DB_HOST} \
+    SEEYA_DB_PORT=${SEEYA_DB_PORT}
+
 CMD ["uvicorn", "seeya_server.asgi:application", "--host", "0.0.0.0", "--port", "8080"]
