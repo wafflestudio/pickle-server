@@ -1,12 +1,9 @@
-from ninja import Router, Schema
-
-from ninja.errors import AuthenticationError
 from django.contrib.auth import authenticate, login, logout
-
 from django.http import HttpResponse
+from ninja import Router, Schema
+from ninja.errors import AuthenticationError
 
 from user.models import User
-
 
 router = Router(tags=["user"])
 
@@ -63,4 +60,3 @@ def post_logout(request, response: HttpResponse):
 @router.get("/me", response={200: UserSchema})
 def get_user_me(request):
     return request.user
-

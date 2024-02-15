@@ -10,33 +10,81 @@ class Migration(migrations.Migration):
     initial = True
 
     dependencies = [
-        ('post', '0001_initial'),
+        ("post", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.CreateModel(
-            name='Challenge',
+            name="Challenge",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('start_time', models.DateTimeField(auto_now_add=True)),
-                ('end_time', models.DateTimeField()),
-                ('is_active', models.BooleanField(default=True)),
-                ('post', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='challenges', to='post.post')),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                ("start_time", models.DateTimeField(auto_now_add=True)),
+                ("end_time", models.DateTimeField()),
+                ("is_active", models.BooleanField(default=True)),
+                (
+                    "post",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="challenges",
+                        to="post.post",
+                    ),
+                ),
             ],
         ),
         migrations.CreateModel(
-            name='UserAcceptChallenge',
+            name="UserAcceptChallenge",
             fields=[
-                ('id', models.BigAutoField(auto_created=True, primary_key=True, serialize=False, verbose_name='ID')),
-                ('status', models.CharField(choices=[('accepted', 'Accepted'), ('failed', 'Failed'), ('completed', 'Completed')], default='accepted', max_length=10)),
-                ('start_time', models.DateTimeField(auto_now_add=True)),
-                ('end_time', models.DateTimeField()),
-                ('challenge', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accepted_users', to='challenge.challenge')),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, related_name='accepted_challenges', to=settings.AUTH_USER_MODEL)),
+                (
+                    "id",
+                    models.BigAutoField(
+                        auto_created=True,
+                        primary_key=True,
+                        serialize=False,
+                        verbose_name="ID",
+                    ),
+                ),
+                (
+                    "status",
+                    models.CharField(
+                        choices=[
+                            ("accepted", "Accepted"),
+                            ("failed", "Failed"),
+                            ("completed", "Completed"),
+                        ],
+                        default="accepted",
+                        max_length=10,
+                    ),
+                ),
+                ("start_time", models.DateTimeField(auto_now_add=True)),
+                ("end_time", models.DateTimeField()),
+                (
+                    "challenge",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="accepted_users",
+                        to="challenge.challenge",
+                    ),
+                ),
+                (
+                    "user",
+                    models.ForeignKey(
+                        on_delete=django.db.models.deletion.CASCADE,
+                        related_name="accepted_challenges",
+                        to=settings.AUTH_USER_MODEL,
+                    ),
+                ),
             ],
             options={
-                'unique_together': {('user', 'challenge')},
+                "unique_together": {("user", "challenge")},
             },
         ),
     ]

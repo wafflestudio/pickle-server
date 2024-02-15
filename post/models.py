@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
@@ -26,9 +26,10 @@ class UserLikesPost(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "post"], name='%(app_label)s_%(class)s_unique_user_post')
+            models.UniqueConstraint(
+                fields=["user", "post"], name="%(app_label)s_%(class)s_unique_user_post"
+            )
         ]
-        
 
     def __str__(self):
         return f"{self.user} likes {self.post}"
