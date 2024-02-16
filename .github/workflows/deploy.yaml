@@ -16,7 +16,7 @@ jobs:
 
     env:
       IMAGE_TAG: ${{ github.run_number }}
-      ECR_REPOSITORY: seeya
+      ECR_REPOSITORY: seeya/seeya-server
 
     steps:
       - name: Checkout
