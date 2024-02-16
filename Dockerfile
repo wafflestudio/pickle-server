@@ -25,7 +25,9 @@ RUN apt-get update && apt-get install -y --no-install-recommends \
 
 COPY --from=builder ${VIRTUAL_ENV} ${VIRTUAL_ENV}
 
-COPY seeya_server ./seeya_server
+COPY . /seeya_server
+
+WORKDIR /seeya_server
 
 EXPOSE 8080
 
