@@ -3,6 +3,7 @@ from typing import Optional
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import IntegrityError
 from ninja import Schema
 from ninja.errors import AuthenticationError
 from ninja.errors import ValidationError as NinjaValidationError
@@ -52,6 +53,9 @@ def api_exception_response(request, exc):
     elif isinstance(exc, DjangoValidationError):
         status_code = 400
         error_msg = exc.message
+    elif isinstance(exc, IntegrityError):
+        status_code = 409  # Conflict
+        error_msg = exc.__cause__.args[0].split(" ")[0]
     elif isinstance(exc, NinjaValidationError):
         status_code = 422
         error_msg = exc.errors[0]["msg"]
