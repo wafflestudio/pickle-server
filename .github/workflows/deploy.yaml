@@ -44,10 +44,10 @@ jobs:
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
           build-args: |
-            SEEYA_ENV = prod
-            SEEYA_SECRET_KEY = ${{ secrets.SEEYA_SECRET_KEY }}
-            SEEYA_DB_NAME = ${{ secrets.SEEYA_DB_NAME}}
-            SEEYA_DB_USER = ${{ secrets.SEEYA_DB_USER }}
-            SEEYA_DB_PASSWORD = ${{ secrets.SEEYA_DB_PASSWORD }}
-            SEEYA_DB_HOST = ${{ secrets.SEEYA_DB_HOST }}
-            SEEYA_DB_PORT = ${{ secrets.SEEYA_DB_PORT }}
+            SEEYA_ENV=prod
+            SEEYA_SECRET_KEY='${{ secrets.SEEYA_SECRET_KEY }}'
+            SEEYA_DB_NAME=${{ secrets.SEEYA_DB_NAME}}
+            SEEYA_DB_USER=${{ secrets.SEEYA_DB_USER }}
+            SEEYA_DB_PASSWORD=${{ secrets.SEEYA_DB_PASSWORD }}
+            SEEYA_DB_HOST=${{ secrets.SEEYA_DB_HOST }}
+            SEEYA_DB_PORT=${{ secrets.SEEYA_DB_PORT }}
