@@ -3,7 +3,7 @@ from .common import *
 DEBUG = False
 
 # FIXME localhost는 dev 환경 구축 후 제거
-ALLOWED_HOSTS = ["seeya.wafflestudio.com", "localhost"]
+ALLOWED_HOSTS = ["seeya.wafflestudio.com", "seeya-api.wafflestudio.com", "localhost"]
 
 DATABASES = {
     "default": {
