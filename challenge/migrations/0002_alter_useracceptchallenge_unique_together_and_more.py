@@ -7,17 +7,20 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('challenge', '0001_initial'),
+        ("challenge", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='useracceptchallenge',
+            name="useracceptchallenge",
             unique_together=set(),
         ),
         migrations.AddConstraint(
-            model_name='useracceptchallenge',
-            constraint=models.UniqueConstraint(fields=('user', 'challenge'), name='challenge_useracceptchallenge_unique_user_challenge'),
+            model_name="useracceptchallenge",
+            constraint=models.UniqueConstraint(
+                fields=("user", "challenge"),
+                name="challenge_useracceptchallenge_unique_user_challenge",
+            ),
         ),
     ]

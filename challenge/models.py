@@ -1,5 +1,5 @@
-from django.db import models
 from django.contrib.auth import get_user_model
+from django.db import models
 
 User = get_user_model()
 
@@ -34,10 +34,11 @@ class UserAcceptChallenge(models.Model):
 
     class Meta:
         constraints = [
-            models.UniqueConstraint(fields=["user", "challenge"], name='%(app_label)s_%(class)s_unique_user_challenge')
+            models.UniqueConstraint(
+                fields=["user", "challenge"],
+                name="%(app_label)s_%(class)s_unique_user_challenge",
+            )
         ]
-        
-        
 
     def __str__(self):
         return f"{self.user} accepted {self.challenge}"

@@ -1,12 +1,11 @@
 import re
-from ninja.errors import AuthenticationError
-from django.core.exceptions import PermissionDenied, ObjectDoesNotExist
-from django.core.exceptions import ValidationError as DjangoValidationError
-from ninja.errors import ValidationError as NinjaValidationError
-
 from typing import Optional
 
+from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
+from django.core.exceptions import ValidationError as DjangoValidationError
 from ninja import Schema
+from ninja.errors import AuthenticationError
+from ninja.errors import ValidationError as NinjaValidationError
 from ninja.responses import codes_2xx, codes_4xx
 
 

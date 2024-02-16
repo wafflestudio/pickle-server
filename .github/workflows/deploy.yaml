@@ -4,10 +4,15 @@ on:
   push:
     branches: [main]
 
+concurrency:
+  group: deploy
+  cancel-in-progress: true
+
 jobs:
   deploy:
     name: deploy
     runs-on: ubuntu-latest
+    environment: prod
 
     env:
       IMAGE_TAG: ${{ github.run_number }}
@@ -15,7 +20,7 @@ jobs:
 
     steps:
       - name: Checkout
-        uses: actions/checkout@v3
+        uses: actions/checkout@v4
 
       - name: Configure AWS credentials
         uses: aws-actions/configure-aws-credentials@v2
@@ -33,7 +38,15 @@ jobs:
         uses: docker/build-push-action@v4
         env:
           ECR_REGISTRY: ${{ steps.login-ecr.outputs.registry }}
+
         with:
           context: .
           push: true
           tags: ${{ env.ECR_REGISTRY }}/${{ env.ECR_REPOSITORY }}:${{ env.IMAGE_TAG }}
+          build-args: |
+            SEEYA_ENV = prod
+            SEEYA_DB_NAME = ${{ secrets.SEEYA_DB_NAME}}
+            SEEYA_DB_USER = ${{ secrets.SEEYA_DB_USER }}
+            SEEYA_DB_PASSWORD = ${{ secrets.SEEYA_DB_PASSWORD }}
+            SEEYA_DB_HOST = ${{ secrets.SEEYA_DB_HOST }}
+            SEEYA_DB_PORT = ${{ secrets.SEEYA_DB_PORT }}

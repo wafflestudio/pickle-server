@@ -7,17 +7,19 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ('post', '0001_initial'),
+        ("post", "0001_initial"),
         migrations.swappable_dependency(settings.AUTH_USER_MODEL),
     ]
 
     operations = [
         migrations.AlterUniqueTogether(
-            name='userlikespost',
+            name="userlikespost",
             unique_together=set(),
         ),
         migrations.AddConstraint(
-            model_name='userlikespost',
-            constraint=models.UniqueConstraint(fields=('user', 'post'), name='post_userlikespost_unique_user_post'),
+            model_name="userlikespost",
+            constraint=models.UniqueConstraint(
+                fields=("user", "post"), name="post_userlikespost_unique_user_post"
+            ),
         ),
     ]
