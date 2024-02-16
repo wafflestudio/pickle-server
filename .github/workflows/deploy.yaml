@@ -51,5 +51,5 @@ jobs:
             SEEYA_DB_PASSWORD=${{ secrets.SEEYA_DB_PASSWORD }}
             SEEYA_DB_HOST=${{ secrets.SEEYA_DB_HOST }}
             SEEYA_S3_BUCKET_NAME=${{ secrets.SEEYA_S3_BUCKET_NAME }}
-            SEEYA_S3_ACCESS_KEY=${{ secrets.SEEYA_S3_ACCESS_KEY }}
-            SEEYA_S3_SECRET_KEY=${{ secrets.SEEYA_S3_SECRET_KEY }}
+            AWS_ACCESS_KEY_ID=${{ secrets.AWS_ACCESS_KEY_ID }}
+            AWS_SECRET_ACCESS_KEY=${{ secrets.AWS_SECRET_ACCESS_KEY }}

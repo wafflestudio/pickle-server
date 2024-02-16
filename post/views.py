@@ -4,8 +4,8 @@ from typing import List
 from ninja import File, Router, Schema
 from ninja.files import UploadedFile
 
-from user.models import User
 from post.models import Post
+from user.models import User
 
 router = Router(tags=["post"])
 
