@@ -1,5 +1,4 @@
 from datetime import datetime
-from decimal import Decimal
 
 from ninja import Schema
 
@@ -7,8 +6,8 @@ from ninja import Schema
 class PostCreateSchema(Schema):
     text: str
     secret_text: str
-    latitude: Decimal
-    longitude: Decimal
+    latitude: float
+    longitude: float
 
 
 class PostSchema(Schema):
@@ -22,8 +21,8 @@ class PostSchema(Schema):
     updated_at: datetime
     like_count: int
     challenge_count: int
-    latitude: Decimal
-    longitude: Decimal
+    latitude: float
+    longitude: float
     is_liked: bool
 
     @staticmethod
@@ -38,4 +37,4 @@ class PostSchema(Schema):
 
 
 class PostWithDistanceSchema(PostSchema):
-    distance: Decimal
+    distance: float

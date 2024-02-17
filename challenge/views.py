@@ -3,16 +3,13 @@ from http import HTTPStatus
 
 from django.db import transaction
 from django.http import HttpRequest, StreamingHttpResponse
-
 from ninja import File, Form, Router, UploadedFile
-import challenge
 
+import challenge
 from challenge.models import Challenge, ChallengeStatus
-from challenge.schemas import (
-    ChallengeAcceptSchema,
-    ChallengeSchema,
-)
+from challenge.schemas import ChallengeAcceptSchema, ChallengeSchema
 from post.models import Post
+from post.schemas import PostWithDistanceSchema
 from seeya_server.exceptions import ErrorResponseSchema, SeeyaApiError
 
 logger = logging.getLogger(__name__)
@@ -22,10 +19,10 @@ router = Router(tags=["challenge"])
 
 
 @router.post(
-    "/",
+    "",
     response={
         201: ChallengeSchema,
-        frozenset((403, 404)): ErrorResponseSchema,
+        frozenset((401, 403, 404)): ErrorResponseSchema,
     },
 )
 def accept_challenge(request: HttpRequest, body: ChallengeAcceptSchema):
@@ -104,3 +101,35 @@ def evaluate_challenge(request: HttpRequest, challenge_id: int):
 
         raise SeeyaApiError("오류가 발생했습니다.", HTTPStatus.BAD_REQUEST)
     return response
+
+
+@router.get(
+    "",
+    response={
+        200: list[PostWithDistanceSchema],
+        frozenset((404, 403)): ErrorResponseSchema,
+    },
+    auth=None,
+)
+def list_challenges(request: HttpRequest, latitude: float, longitude: float):
+    return Post.filter_with_distance(latitude, longitude, 5000).order_by(
+        "-like_count", "distance"
+    )[:8]
+
+
+@router.get(
+    "/today",
+    response={
+        200: PostWithDistanceSchema,
+        frozenset((404, 403)): ErrorResponseSchema,
+    },
+)
+def get_today_challenges(request: HttpRequest, latitude: float, longitude: float):
+    posts = (
+        Post.filter_with_distance(latitude, longitude, 5000)
+        .filter(author__is_superuser=True)
+        .select_related("author")
+    )
+    if not posts.exists():
+        raise SeeyaApiError("근처에 오늘의 챌린지가 없습니다.", HTTPStatus.NOT_FOUND)
+    return posts.first()
