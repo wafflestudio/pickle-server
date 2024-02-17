@@ -1,5 +1,5 @@
-from base64 import b64decode, b64encode
 from dataclasses import dataclass
+from base64 import b64decode, b64encode
 from typing import Any, List, Optional
 from urllib import parse
 
@@ -60,10 +60,9 @@ class CursorPagination(PaginationBase):
         def decode_cursor(cls, encoded_cursor: Optional[str]) -> Cursor:
             if encoded_cursor is None:
                 return Cursor()
-
             try:
-                querystring = b64decode(encoded_cursor).decode()
-                tokens = parse.parse_qs(querystring, keep_blank_values=True)
+                decoded = b64decode(encoded_cursor).decode()
+                tokens = parse.parse_qs(decoded, keep_blank_values=True)
 
                 offset = int(tokens.get("o", ["0"])[0])
                 offset = _clamp(offset, 0, CursorPagination._offset_cutoff)
@@ -73,6 +72,7 @@ class CursorPagination(PaginationBase):
 
                 position = tokens.get("p", [None])[0]
             except (TypeError, ValueError) as e:
+                print(e)
                 raise ValueError(_("Invalid cursor.")) from e
 
             return Cursor(offset=offset, reverse=reverse, position=position)
@@ -105,7 +105,7 @@ class CursorPagination(PaginationBase):
         order = queryset.query.order_by
         total_count = queryset.count()
 
-        base_url = request.build_absolute_uri()
+        base_url = ""  # custom
         cursor = pagination.cursor
 
         if cursor.reverse:
@@ -193,7 +193,8 @@ class CursorPagination(PaginationBase):
 
         querystring = parse.urlencode(tokens, doseq=True)
         encoded = b64encode(querystring.encode()).decode()
-        return _replace_query_param(base_url, "cursor", encoded)
+
+        return encoded
 
     def next_link(
         self,
