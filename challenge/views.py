@@ -1,31 +1,18 @@
-from datetime import datetime
-from decimal import Decimal
 from http import HTTPStatus
 
 from django.http import HttpRequest
-from ninja import Router, Schema
-from ninja.security import django_auth
+from ninja import Router
 
 from challenge.models import Challenge
+from challenge.schemas import (
+    AcceptChallengeSchema,
+    ChallengeResponseSchema,
+    CoordinateSchema,
+)
 from post.models import Post
 from seeya_server.exceptions import ErrorResponseSchema, SeeyaApiError
 
 router = Router(tags=["challenge"])
-
-
-class CoordinateSchema(Schema):
-    latitude: Decimal
-    longitude: Decimal
-
-
-class AcceptChallengeSchema(Schema):
-    post_id: int
-
-
-class ChallengeResponseSchema(Schema):
-    id: int
-    coordinate: CoordinateSchema
-    start_time: datetime
 
 
 @router.post(
