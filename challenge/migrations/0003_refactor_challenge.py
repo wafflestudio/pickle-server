@@ -13,8 +13,8 @@ class Migration(migrations.Migration):
     ]
 
     operations = [
-        migrations.DeleteModel("Challenge"),
         migrations.DeleteModel("UserAcceptChallenge"),
+        migrations.DeleteModel("Challenge"),
         migrations.CreateModel(
             name="Challenge",
             fields=[
