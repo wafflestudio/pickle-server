@@ -1,5 +1,6 @@
 import logging
 from http import HTTPStatus
+from typing import List
 
 from django.db import transaction
 from django.http import HttpRequest, StreamingHttpResponse
@@ -9,7 +10,7 @@ import challenge
 from challenge.models import Challenge, ChallengeStatus
 from challenge.schemas import ChallengeAcceptSchema, ChallengeSchema
 from post.models import Post
-from post.schemas import PostWithDistanceSchema
+from post.schemas import PostWithChallengeInfoSchema, PostWithDistanceSchema
 from seeya_server.exceptions import ErrorResponseSchema, SeeyaApiError
 
 logger = logging.getLogger(__name__)
@@ -77,7 +78,7 @@ def submit_challenge(
 @router.get(
     "/{int:challenge_id}/evaluate",
 )
-def evaluate_challenge(request: HttpRequest, challenge_id: int):
+async def evaluate_challenge(request: HttpRequest, challenge_id: int):
     challenge = Challenge.objects.filter(id=challenge_id).first()
     if not challenge:
         raise SeeyaApiError("존재하지 않는 챌린지입니다.", HTTPStatus.NOT_FOUND)
@@ -104,23 +105,42 @@ def evaluate_challenge(request: HttpRequest, challenge_id: int):
 
 
 @router.get(
-    "",
+    "/{int:challenge_id}",
     response={
-        200: list[PostWithDistanceSchema],
+        200: ChallengeSchema,
         frozenset((404, 403)): ErrorResponseSchema,
     },
-    auth=None,
+)
+def get_challenge(request: HttpRequest, challenge_id: int):
+    challenge = Challenge.objects.filter(id=challenge_id).first()
+    if not challenge:
+        raise SeeyaApiError("존재하지 않는 챌린지입니다.", HTTPStatus.NOT_FOUND)
+    return challenge
+
+
+@router.get(
+    "",
+    response={
+        200: List[PostWithChallengeInfoSchema],
+        frozenset((404, 403)): ErrorResponseSchema,
+    },
 )
 def list_challenges(request: HttpRequest, latitude: float, longitude: float):
-    return Post.filter_with_distance(latitude, longitude, 5000).order_by(
-        "-like_count", "distance"
-    )[:8]
+    user = request.user
+    posts = (
+        Post.filter_with_distance(latitude, longitude, 5000)
+        .prefetch_related("accepted_users")
+        .order_by("-like_count", "distance")[:8]
+    )
+    for post in posts:
+        post._user = user
+    return posts
 
 
 @router.get(
     "/today",
     response={
-        200: PostWithDistanceSchema,
+        200: PostWithChallengeInfoSchema,
         frozenset((404, 403)): ErrorResponseSchema,
     },
 )
@@ -132,4 +152,6 @@ def get_today_challenges(request: HttpRequest, latitude: float, longitude: float
     )
     if not posts.exists():
         raise SeeyaApiError("근처에 오늘의 챌린지가 없습니다.", HTTPStatus.NOT_FOUND)
-    return posts.first()
+    post = posts.first()
+    post._user = request.user
+    return post

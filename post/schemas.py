@@ -1,3 +1,4 @@
+from typing import Optional
 from datetime import datetime
 
 from ninja import Schema
@@ -36,5 +37,27 @@ class PostSchema(Schema):
         return bool(obj._user_likes_post)
 
 
+class PostDetailSchema(PostSchema):
+    my_challenge_id: Optional[int] = None
+
+    @staticmethod
+    def resolve_my_challenge_id(obj):
+        if not hasattr(obj, "_user"):
+            return
+
+        return obj.accepted_users.filter(user=obj._user).first().id
+
+
 class PostWithDistanceSchema(PostSchema):
     distance: float
+
+
+class PostWithChallengeInfoSchema(PostWithDistanceSchema):
+    my_challenge_id: Optional[int] = None
+
+    @staticmethod
+    def resolve_my_challenge_id(obj):
+        if not hasattr(obj, "_user"):
+            return
+
+        return obj.accepted_users.filter(user=obj._user).first().id

@@ -9,7 +9,12 @@ from ninja.pagination import paginate
 
 from common.pagination import CursorPagination
 from post.models import Post
-from post.schemas import PostCreateSchema, PostSchema, PostWithDistanceSchema
+from post.schemas import (
+    PostCreateSchema,
+    PostDetailSchema,
+    PostSchema,
+    PostWithDistanceSchema,
+)
 from seeya_server.exceptions import ErrorResponseSchema
 
 router = Router(tags=["post"])
@@ -17,7 +22,7 @@ router = Router(tags=["post"])
 
 @router.post(
     "/",
-    response={200: PostSchema},
+    response={200: PostDetailSchema},
 )
 def post_create(
     request, params: Form[PostCreateSchema], image: UploadedFile = File(...)
@@ -30,6 +35,7 @@ def post_create(
         latitude=params.latitude,
         longitude=params.longitude,
     )
+    post._user = user
     return post
 
 
@@ -47,18 +53,19 @@ def post_delete(request, post_id: int):
 
 @router.get(
     "/{int:post_id}",
-    response={200: PostSchema},
+    response={200: PostDetailSchema},
 )
 def post_get(request, post_id: int):
     user = request.user
     post = Post.objects.get(id=post_id)
     post._user_likes_post = bool(user.likes.filter(post=post).exists())
+    post._user = user
     return post
 
 
 @router.get(
     "/{int:post_id}/like",
-    response={200: PostSchema},
+    response={200: PostDetailSchema},
 )
 @transaction.atomic
 def post_like(request, post_id: int):
@@ -72,6 +79,7 @@ def post_like(request, post_id: int):
         user.likes.create(post=post)
         post.like_count += 1
         post._user_likes_post = True
+    post._user = user
     post.save()
     return post
 

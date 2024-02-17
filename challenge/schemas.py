@@ -3,6 +3,8 @@ from typing import Optional
 
 from ninja import Schema
 
+from post.schemas import PostDetailSchema
+
 
 class CoordinateSchema(Schema):
     latitude: float
@@ -20,6 +22,7 @@ class ChallengeSchema(Schema):
     image: Optional[str]
     similarity: Optional[int]
     result: Optional[str]
+    post: PostDetailSchema
 
     @staticmethod
     def resolve_coordinate(obj):
