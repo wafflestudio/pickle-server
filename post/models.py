@@ -7,7 +7,6 @@ User = get_user_model()
 
 
 def upload_to_func(instance, filename):
-
     prefix = "uploads/post_images/"
     return prefix + convert_filename(filename)
 
