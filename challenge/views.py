@@ -77,9 +77,12 @@ def submit_challenge(
 
 @router.get(
     "/{int:challenge_id}/evaluate",
+    auth=None,
 )
 async def evaluate_challenge(request: HttpRequest, challenge_id: int):
-    challenge = Challenge.objects.filter(id=challenge_id).first()
+    challenge = (
+        await Challenge.objects.filter(id=challenge_id).select_related("post").afirst()
+    )
     if not challenge:
         raise SeeyaApiError("존재하지 않는 챌린지입니다.", HTTPStatus.NOT_FOUND)
 
