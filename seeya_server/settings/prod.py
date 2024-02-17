@@ -25,6 +25,7 @@ CORS_ORIGIN_WHITELIST = [
     "https://seeya.wafflestudio.com",
     "http://localhost:5173",
 ]
+CORS_ALLOWED_ORIGINS = CORS_ORIGIN_WHITELIST
 CORS_ALLOW_CREDENTIALS = True
 
 DATABASES = {
