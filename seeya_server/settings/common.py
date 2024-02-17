@@ -140,3 +140,6 @@ STORAGES = {
         },
     },
 }
+
+# openai
+OPENAI_API_KEY = os.getenv("SEEYA_OPENAI_API_KEY")
