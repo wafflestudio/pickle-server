@@ -1,3 +1,4 @@
+import logging
 import base64
 import io
 from PIL import Image
@@ -7,6 +8,8 @@ from openai.types.chat import ChatCompletionChunk
 
 from django.conf import settings
 from challenge.models import Challenge, ChallengeStatus
+
+logger = logging.getLogger(__name__)
 
 
 def encode_image_to_base64(image: Image):
@@ -48,7 +51,6 @@ def evaluate_challenge(challenge_id: int, image_1_bytes: bytes, image_2_bytes: b
             ],
         },
     ]
-    print(PROMPT_MESSAGES)
 
     params = {
         "model": "gpt-4-vision-preview",
@@ -79,6 +81,10 @@ def evaluate_challenge(challenge_id: int, image_1_bytes: bytes, image_2_bytes: b
     except Exception as e:
         similarity = 0
         result = "유사도를 측정할 수 없어요."
+
+    logger.info(
+        f"challenge_id: {challenge_id}, similarity: {similarity}, result: {result}"
+    )
 
     save_challenge_result(challenge_id, similarity, result)
 
