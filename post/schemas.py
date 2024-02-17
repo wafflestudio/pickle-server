@@ -19,6 +19,7 @@ class PostSchema(Schema):
     created_at: datetime
     updated_at: datetime
     like_count: int
+    challenge_count: int
     latitude: Decimal
     longitude: Decimal
     is_liked: bool

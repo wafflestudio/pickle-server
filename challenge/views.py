@@ -1,6 +1,7 @@
 import logging
 from http import HTTPStatus
 
+from django.db import transaction
 from django.http import HttpRequest, StreamingHttpResponse
 
 from ninja import File, Form, Router, UploadedFile
@@ -56,6 +57,7 @@ def accept_challenge(request: HttpRequest, body: ChallengeAcceptSchema):
         frozenset((403, 404)): ErrorResponseSchema,
     },
 )
+@transaction.atomic
 def submit_challenge(
     request: HttpRequest,
     challenge_id: int,
@@ -68,6 +70,10 @@ def submit_challenge(
 
     challenge.image = image
     challenge.save()
+    post = challenge.post
+    post.challenge_count += 1
+    post.save()
+
     return HTTPStatus.OK, challenge
 
 

@@ -93,15 +93,16 @@ def post_list(request, latitude: Decimal, longitude: Decimal):
         * Sin(Radians(F("latitude"), output_field=FloatField()))
     )
 
+    bound_degrees = 0.01
     posts = (
         Post.objects.all()
         # 빠른 계산을 위해 위경도 0.01도 이내의 게시물만 가져옵니다.
         # 서울 기준 위도 0.01도가 약 1.1km, 경도 0.01도가 약 0.88km 입니다.
         .filter(
-            latitude__lte=latitude + Decimal(0.01),
-            latitude__gte=latitude - Decimal(0.01),
-            longitude__lte=longitude + Decimal(0.01),
-            longitude__gte=longitude - Decimal(0.01),
+            latitude__lte=latitude + Decimal(bound_degrees),
+            latitude__gte=latitude - Decimal(bound_degrees),
+            longitude__lte=longitude + Decimal(bound_degrees),
+            longitude__gte=longitude - Decimal(bound_degrees),
         )
         .annotate(distance=distance_in_meter_query)
         .filter(distance__lte=1000)
