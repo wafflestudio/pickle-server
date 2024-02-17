@@ -19,6 +19,8 @@ class PostSchema(Schema):
     created_at: datetime
     updated_at: datetime
     like_count: int
+    latitude: Decimal
+    longitude: Decimal
     is_liked: bool
 
     @staticmethod
@@ -30,3 +32,7 @@ class PostSchema(Schema):
         if not hasattr(obj, "_user_likes_post"):
             return False
         return bool(obj._user_likes_post)
+
+
+class PostWithDistanceSchema(PostSchema):
+    distance: Decimal

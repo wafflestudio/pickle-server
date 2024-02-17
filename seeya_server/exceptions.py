@@ -9,7 +9,7 @@ from ninja.errors import AuthenticationError
 from ninja.errors import ValidationError as NinjaValidationError
 from ninja.responses import codes_2xx, codes_4xx
 
-from seeya_server.utils import camel_to_snake
+from common.utils import camel_to_snake
 
 logger = getLogger(__name__)
 
