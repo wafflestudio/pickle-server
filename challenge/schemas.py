@@ -1,12 +1,11 @@
 from datetime import datetime
-from decimal import Decimal
 
 from ninja import Schema
 
 
 class CoordinateSchema(Schema):
-    latitude: Decimal
-    longitude: Decimal
+    latitude: float
+    longitude: float
 
 
 class AcceptChallengeSchema(Schema):
