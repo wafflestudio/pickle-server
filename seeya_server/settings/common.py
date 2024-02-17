@@ -27,7 +27,7 @@ SECRET_KEY = os.getenv("SEEYA_SECRET_KEY")
 DEBUG = False
 
 ALLOWED_HOSTS = []
-
+APPEND_SLASH = False
 
 # Application definition
 
