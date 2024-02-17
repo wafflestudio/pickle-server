@@ -1,6 +1,6 @@
 from .common import *
 
-DEBUG = False
+DEBUG = True
 
 # FIXME localhost는 dev 환경 구축 후 제거
 ALLOWED_HOSTS = [
@@ -9,7 +9,12 @@ ALLOWED_HOSTS = [
     "localhost",
 ]
 
-CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
+CSRF_TRUSTED_ORIGINS = [
+    "https://seeya.wafflestudio.com",
+    "https://seeya-api.wafflestudio.com",
+    "http://localhost:5173",
+    "http://localhost:8080",
+]
 CSRF_COOKIE_DOMAIN = ".wafflestudio.com"
 CSRF_COOKIE_SECURE = True
 SESSION_COOKIE_SECURE = True
