@@ -1,8 +1,8 @@
 from django.conf import settings
 from ninja import NinjaAPI
-from ninja.security import django_auth
+from ninja.security import SessionAuth
 
-api = NinjaAPI()
+api = NinjaAPI(auth=SessionAuth(csrf=False))
 
 from post.views import router as post_router
 from user.views import router as user_router
