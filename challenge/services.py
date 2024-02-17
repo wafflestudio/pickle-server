@@ -67,7 +67,6 @@ def evaluate_challenge(challenge_id: int, image_1_bytes: bytes, image_2_bytes: b
         try:
             answer_delta = chunk.choices[0].delta.content
             if answer_delta is not None:
-                print(answer_delta, end="")
                 answer += answer_delta
         except Exception as e:
             raise e
