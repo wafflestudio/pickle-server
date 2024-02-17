@@ -5,6 +5,7 @@ from ninja import Schema
 
 class PostCreateSchema(Schema):
     text: str
+    secret_text: str
     latitude: float
     longitude: float
 
@@ -12,12 +13,14 @@ class PostCreateSchema(Schema):
 class PostSchema(Schema):
     id: int
     text: str
+    secret_text: str
     image: str
     author_id: int
     author_name: str
     created_at: datetime
     updated_at: datetime
     like_count: int
+    challenge_count: int
     latitude: float
     longitude: float
     is_liked: bool

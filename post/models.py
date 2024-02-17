@@ -20,11 +20,13 @@ def upload_to_func(instance, filename):
 
 class Post(models.Model):
     text = models.TextField(blank=True)
+    secret_text = models.TextField(blank=True)
     image = models.ImageField(upload_to=upload_to_func, blank=True, null=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     like_count = models.IntegerField(default=0)
+    challenge_count = models.IntegerField(default=0)
     latitude = models.FloatField(
         _("latitude"),
         null=False,

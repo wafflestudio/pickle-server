@@ -6,7 +6,7 @@ from django.db import migrations, models
 class Migration(migrations.Migration):
 
     dependencies = [
-        ("post", "0007_post_latitude_post_longitude"),
+        ("post", "0009_post_secret_text"),
     ]
 
     operations = [
