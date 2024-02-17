@@ -17,7 +17,9 @@ CSRF_TRUSTED_ORIGINS = [
 ]
 CSRF_COOKIE_DOMAIN = ".wafflestudio.com"
 CSRF_COOKIE_SECURE = True
-SESSION_COOKIE_SECURE = True
+
+SESSION_COOKIE_SECURE = False
+SESSION_COOKIE_SAMESITE = "lax"
 
 CORS_ORIGIN_WHITELIST = [
     "https://seeya.wafflestudio.com",
