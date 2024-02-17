@@ -6,6 +6,7 @@ from ninja import Schema
 
 class PostCreateSchema(Schema):
     text: str
+    secret_text: str
     latitude: Decimal
     longitude: Decimal
 
@@ -13,6 +14,7 @@ class PostCreateSchema(Schema):
 class PostSchema(Schema):
     id: int
     text: str
+    secret_text: str
     image: str
     author_id: int
     author_name: str
