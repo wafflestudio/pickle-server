@@ -28,18 +28,8 @@ class SeeyaApiError(Exception):
 
 
 class ErrorResponseSchema(Schema):
-    success: bool
     error_type: Optional[str] = None
     detail: Optional[str] = ""
-
-    @classmethod
-    def from_status_code(cls, status_code: int, detail: Optional[str] = ""):
-        if status_code in codes_2xx:
-            return cls(success=True, detail=detail)
-        elif status_code in codes_4xx:
-            return cls(success=False, detail=detail)
-        else:
-            raise NotImplementedError
 
 
 def api_exception_response(request, exc: Exception):
