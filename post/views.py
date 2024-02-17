@@ -8,7 +8,7 @@ from ninja import File, Router, Schema
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
-from base.pagination import CursorPagination
+from common.pagination import CursorPagination
 from post.models import Post
 from seeya_server.exceptions import ErrorResponseSchema
 

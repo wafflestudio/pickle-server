@@ -127,6 +127,7 @@ STORAGES = {
             "bucket_name": os.getenv("SEEYA_S3_BUCKET_NAME"),
             "access_key": os.getenv("AWS_ACCESS_KEY_ID"),
             "secret_key": os.getenv("AWS_SECRET_ACCESS_KEY"),
+            "querystring_auth": False,
         },
     },
     "staticfiles": {
