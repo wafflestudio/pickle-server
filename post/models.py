@@ -1,5 +1,6 @@
 from django.contrib.auth import get_user_model
 from django.db import models
+from django.utils.translation import gettext_lazy as _
 
 from common.upload import convert_filename
 
@@ -18,6 +19,20 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     like_count = models.IntegerField(default=0)
+    latitude = models.DecimalField(
+        _("latitude"),
+        null=False,
+        max_digits=9,
+        decimal_places=6,
+        default="21.89975",
+    )
+    longitude = models.DecimalField(
+        _("longitude"),
+        null=False,
+        max_digits=9,
+        decimal_places=6,
+        default="168.38367",
+    )
 
     class Meta:
         ordering = ["-created_at"]

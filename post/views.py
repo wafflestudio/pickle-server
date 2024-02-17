@@ -1,51 +1,27 @@
-import datetime
 from typing import List
 
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Prefetch
-from ninja import File, Router, Schema
+from ninja import File, Form, Router
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
 from common.pagination import CursorPagination
 from post.models import Post
+from post.schemas import PostCreateSchema, PostSchema
 from seeya_server.exceptions import ErrorResponseSchema
 
 router = Router(tags=["post"])
 
 
-class PostCreateSchema(Schema):
-    text: str
-
-
-class PostSchema(Schema):
-    id: int
-    text: str
-    image: str
-    author_id: int
-    author_name: str
-    created_at: datetime.datetime
-    updated_at: datetime.datetime
-    like_count: int
-    is_liked: bool
-
-    @staticmethod
-    def resolve_author_name(obj):
-        return obj.author.username
-
-    @staticmethod
-    def resolve_is_liked(obj):
-        if not hasattr(obj, "_user_likes_post"):
-            return False
-        return bool(obj._user_likes_post)
-
-
 @router.post(
-    "/create",
+    "/",
     response={200: PostSchema},
 )
-def post_create(request, params: PostCreateSchema, image: UploadedFile = File(...)):
+def post_create(
+    request, params: Form[PostCreateSchema], image: UploadedFile = File(...)
+):
     user = request.user
     post = Post.objects.create(
         text=params.text,
