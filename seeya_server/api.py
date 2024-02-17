@@ -4,8 +4,8 @@ from ninja.security import django_auth
 
 api = NinjaAPI(auth=django_auth)
 
-from user.views import router as user_router
 from post.views import router as post_router
+from user.views import router as user_router
 
 api.add_router("user/", user_router)
 api.add_router("post/", post_router)
