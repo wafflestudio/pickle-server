@@ -83,7 +83,7 @@ def post_like(request, post_id: int):
 @paginate(CursorPagination)
 def post_list(request, latitude: float, longitude: float):
     return (
-        Post.filter_with_distance(latitude, longitude, 1000)
+        Post.filter_with_distance(latitude, longitude, 10000)
         .order_by("distance")
         .prefetch_related(
             "author",
