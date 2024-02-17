@@ -1,10 +1,7 @@
-from typing import Optional
-
 from django.contrib.auth import authenticate, login, logout
-from django.http import HttpResponse
-from ninja import File, Router
-from ninja.files import UploadedFile
+from ninja import File, Form, Router
 from ninja.errors import AuthenticationError
+from ninja.files import UploadedFile
 
 from user.models import User
 from user.schemas import UserCreateIn, UserLoginIn, UserSchema
@@ -41,7 +38,7 @@ def get_check_username(request, username: str):
     response={200: UserSchema},
     auth=None,
 )
-def post_signup(request, params: UserCreateIn, image: UploadedFile = File(None)):
+def post_signup(request, params: Form[UserCreateIn], image: UploadedFile = File(None)):
     user = User.objects.create_user(**params.dict(), image=image)
     return post_login(request, params)
 
