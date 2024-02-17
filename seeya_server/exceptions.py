@@ -3,13 +3,14 @@ from typing import Optional
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
 from django.core.exceptions import ValidationError as DjangoValidationError
+from django.db import IntegrityError
 from ninja import Schema
 from ninja.errors import AuthenticationError
 from ninja.errors import ValidationError as NinjaValidationError
 from ninja.responses import codes_2xx, codes_4xx
 
 
-class APIError(Exception):
+class ApiError(Exception):
     status_code = 500
     detail = "Internal Server Error"
 
@@ -47,11 +48,14 @@ def api_exception_response(request, exc):
     status_code = 500
     error_msg = str(exc)
     error_type = camel_to_snake(exc.__class__.__name__)
-    if isinstance(exc, APIError):
+    if isinstance(exc, ApiError):
         status_code = exc.status_code
     elif isinstance(exc, DjangoValidationError):
         status_code = 400
         error_msg = exc.message
+    elif isinstance(exc, IntegrityError):
+        status_code = 409  # Conflict
+        error_msg = exc.__cause__.args[0].split(" ")[0]
     elif isinstance(exc, NinjaValidationError):
         status_code = 422
         error_msg = exc.errors[0]["msg"]
