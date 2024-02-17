@@ -97,6 +97,29 @@ def post_list(request, latitude: float, longitude: float):
 
 
 @router.get(
+    "/liked_list",
+    response={200: List[PostSchema]},
+)
+@paginate(CursorPagination)
+def post_liked_list(request):
+    posts = (
+        Post.objects.filter(
+            likes__user=request.user,
+        )
+        .order_by("-id")
+        .prefetch_related(
+            "author",
+            Prefetch(
+                "likes",
+                queryset=request.user.likes.all(),
+                to_attr="_user_likes_post",
+            ),
+        )
+    )
+    return posts
+
+
+@router.get(
     "/my/list",
     response={200: List[PostSchema]},
 )

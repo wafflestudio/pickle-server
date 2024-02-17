@@ -34,12 +34,12 @@ def evaluate_challenge(challenge_id: int, image_1_bytes: bytes, image_2_bytes: b
     image_2 = image_2.resize((RESIZING_SIZE, RESIZING_SIZE))
 
     v2 = f"""describe 2 image of place or object in college campus. think about detailed analysis of place and object, background information of each image, but do not write the description to output.
-    Them measure similarity (in integer, range from 0 to 100) of 2 images. 
-    Similaity should be measured by following priority.
-    1. same place or object
-    2. same background
-    Time, weather, small objects, and people can be ignored if images are representing same place or object.
-    show similarity after `similarity:`. add 3~4 sentence description of second image's characteristic and reasoning for the similarity after `result:`. response should use friendly, casual tone, and use `~해요`체.
+Them measure similarity (in integer, range from 0 to 100) of 2 images. 
+Similaity should be measured by following priority.
+1. same place or object
+2. same background
+Time, weather, small objects, and people can be ignored if images are representing same place or object.
+show similarity after `similarity:`. add 2~3 sentence description of second image's characteristic and reasoning for the similarity after `result:`. do not mention `두 번째` in output. response should use friendly, casual tone, and use `~해요`체.
     """
     PROMPT_MESSAGES = [
         {
