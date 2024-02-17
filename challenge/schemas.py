@@ -17,7 +17,7 @@ class ChallengeSchema(Schema):
     id: int
     coordinate: CoordinateSchema
     start_time: datetime
-    image: str
+    image: Optional[str]
     similarity: Optional[int]
     result: Optional[str]
 
