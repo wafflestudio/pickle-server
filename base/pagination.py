@@ -6,14 +6,12 @@ from urllib import parse
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.translation import gettext as _
-from pydantic import field_validator
-
-
 from ninja import Field, Schema
 from ninja.pagination import PaginationBase
-
+from pydantic import field_validator
 
 # https://github.dev/vitalik/django-ninja/pull/836
+
 
 @dataclass
 class Cursor:

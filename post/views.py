@@ -1,18 +1,16 @@
 import datetime
 from typing import List
+
 from django.core.exceptions import PermissionDenied
-
-from ninja import File, Router, Schema
-from ninja.pagination import paginate
-from ninja.files import UploadedFile
-
 from django.db import transaction
 from django.db.models import Prefetch
+from ninja import File, Router, Schema
+from ninja.files import UploadedFile
+from ninja.pagination import paginate
 
 from base.pagination import CursorPagination
-from seeya_server.exceptions import ErrorResponseSchema
-
 from post.models import Post
+from seeya_server.exceptions import ErrorResponseSchema
 
 router = Router(tags=["post"])
 

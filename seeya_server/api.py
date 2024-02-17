@@ -4,8 +4,8 @@ from ninja.security import django_auth
 
 api = NinjaAPI()
 
-from user.views import router as user_router
 from post.views import router as post_router
+from user.views import router as user_router
 
 api.add_router("user/", user_router)
 api.add_router("post/", post_router)
@@ -14,6 +14,7 @@ api.add_router("post/", post_router)
 """
 
 from seeya_server.exceptions import api_exception_response
+
 
 @api.exception_handler(Exception)
 def api_exception_handler(request, exc):
