@@ -64,7 +64,7 @@ def post_get(request, post_id: int):
     return post
 
 
-@router.get(
+@router.post(
     "/{int:post_id}/like",
     response={200: PostDetailSchema},
 )
