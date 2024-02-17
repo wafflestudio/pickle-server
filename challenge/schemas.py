@@ -15,13 +15,22 @@ class ChallengeAcceptSchema(Schema):
     post_id: int
 
 
-class ChallengeSchema(Schema):
+class ChallengeSimpleSchema(Schema):
     id: int
     coordinate: CoordinateSchema
     start_time: datetime
     image: Optional[str]
     similarity: Optional[int]
     result: Optional[str]
+
+    @staticmethod
+    def resolve_coordinate(obj):
+        return CoordinateSchema(
+            latitude=obj.post.latitude, longitude=obj.post.longitude
+        )
+
+
+class ChallengeSchema(ChallengeSimpleSchema):
     post: PostDetailSchema
 
     @staticmethod

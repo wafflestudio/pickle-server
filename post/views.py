@@ -6,6 +6,7 @@ from django.db.models import Prefetch
 from ninja import File, Form, Router
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
+from challenge.schemas import ChallengeSchema, ChallengeSimpleSchema
 
 from common.pagination import CursorPagination
 from post.models import Post
@@ -82,6 +83,16 @@ def post_like(request, post_id: int):
     post._user = user
     post.save()
     return post
+
+
+@router.get(
+    "/{int:post_id}/challenges",
+    response={200: List[ChallengeSimpleSchema]},
+)
+def get_post_challenges(request, post_id: int):
+    post = Post.objects.get(id=post_id)
+    challenges = post.accepted_users.all().order_by("-similarity")
+    return challenges[:3]
 
 
 @router.get(
