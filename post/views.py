@@ -70,7 +70,6 @@ def post_delete(request, post_id: int):
 @router.get(
     "/{int:post_id}",
     response={200: PostSchema},
-    auth=None,
 )
 def post_get(request, post_id: int):
     user = request.user
@@ -82,7 +81,6 @@ def post_get(request, post_id: int):
 @router.get(
     "/{int:post_id}/like",
     response={200: PostSchema},
-    auth=None,
 )
 @transaction.atomic
 def post_like(request, post_id: int):
