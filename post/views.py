@@ -1,15 +1,12 @@
-from decimal import Decimal
-from math import radians
 from typing import List
 
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
-from django.db.models import F, FloatField, Prefetch
+from django.db.models import Prefetch
 from ninja import File, Form, Router
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
-from common.db import Acos, Cos, Radians, Sin
 from common.pagination import CursorPagination
 from post.models import Post
 from post.schemas import PostCreateSchema, PostSchema, PostWithDistanceSchema
@@ -84,27 +81,9 @@ def post_like(request, post_id: int):
     response={200: List[PostWithDistanceSchema]},
 )
 @paginate(CursorPagination)
-def post_list(request, latitude: Decimal, longitude: Decimal):
-    distance_in_meter_query = 6371000 * Acos(
-        Cos(radians(latitude))
-        * Cos(Radians(F("latitude"), output_field=FloatField()))
-        * Cos(Radians(F("longitude"), output_field=FloatField()) - radians(longitude))
-        + Sin(radians(latitude))
-        * Sin(Radians(F("latitude"), output_field=FloatField()))
-    )
-
-    posts = (
-        Post.objects.all()
-        # 빠른 계산을 위해 위경도 0.01도 이내의 게시물만 가져옵니다.
-        # 서울 기준 위도 0.01도가 약 1.1km, 경도 0.01도가 약 0.88km 입니다.
-        .filter(
-            latitude__lte=latitude + Decimal(0.01),
-            latitude__gte=latitude - Decimal(0.01),
-            longitude__lte=longitude + Decimal(0.01),
-            longitude__gte=longitude - Decimal(0.01),
-        )
-        .annotate(distance=distance_in_meter_query)
-        .filter(distance__lte=1000)
+def post_list(request, latitude: float, longitude: float):
+    return (
+        Post.filter_with_distance(latitude, longitude, 1000)
         .order_by("distance")
         .prefetch_related(
             "author",
@@ -113,9 +92,8 @@ def post_list(request, latitude: Decimal, longitude: Decimal):
                 queryset=request.user.likes.all(),
                 to_attr="_user_likes_post",
             ),
-        )
+        )[:2]
     )
-    return posts
 
 
 @router.get(
