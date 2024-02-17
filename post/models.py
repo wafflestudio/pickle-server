@@ -19,6 +19,7 @@ class Post(models.Model):
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
     like_count = models.IntegerField(default=0)
+    challenge_count = models.IntegerField(default=0)
     latitude = models.DecimalField(
         _("latitude"),
         null=False,
