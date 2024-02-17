@@ -1,17 +1,13 @@
-from django.conf import settings
 from ninja import NinjaAPI
 from ninja.security import SessionAuth
 
-api = NinjaAPI(auth=SessionAuth(csrf=False))
+api = NinjaAPI(title="Seeya API", version="1.0.0", auth=SessionAuth(csrf=False))
 
 from post.views import router as post_router
 from user.views import router as user_router
 
 api.add_router("user/", user_router)
 api.add_router("post/", post_router)
-
-"""
-"""
 
 from seeya_server.exceptions import api_exception_response
 
