@@ -1,4 +1,4 @@
-import re
+from logging import getLogger
 from typing import Optional
 
 from django.core.exceptions import ObjectDoesNotExist, PermissionDenied
@@ -9,16 +9,19 @@ from ninja.errors import AuthenticationError
 from ninja.errors import ValidationError as NinjaValidationError
 from ninja.responses import codes_2xx, codes_4xx
 
+from seeya_server.utils import camel_to_snake
 
-class ApiError(Exception):
-    status_code = 500
-    detail = "Internal Server Error"
+logger = getLogger(__name__)
 
-    def __init__(self, detail=None, status_code=None):
-        if detail:
-            self.detail = detail
-        if status_code is not None:
-            self.status_code = status_code
+
+class SeeyaApiError(Exception):
+    __match_args__ = ("detail", "status_code")
+    detail: str
+    status_code: int
+
+    def __init__(self, detail: Optional[str] = None, status_code: Optional[int] = None):
+        self.detail = detail or "Internal Server Error"
+        self.status_code = status_code or 500
 
     def __str__(self):
         return self.detail
@@ -39,32 +42,36 @@ class ErrorResponseSchema(Schema):
             raise NotImplementedError
 
 
-def camel_to_snake(name):
-    p = re.compile(r"(?<!^)(?=[A-Z])")
-    return p.sub("_", name).lower()
+def api_exception_response(request, exc: Exception):
+    status_code: int = 500
+    error_msg: str = str(exc)
+    error_type: str = camel_to_snake(exc.__class__.__name__)
 
-
-def api_exception_response(request, exc):
-    status_code = 500
-    error_msg = str(exc)
-    error_type = camel_to_snake(exc.__class__.__name__)
-    if isinstance(exc, ApiError):
-        status_code = exc.status_code
-    elif isinstance(exc, DjangoValidationError):
-        status_code = 400
-        error_msg = exc.message
-    elif isinstance(exc, IntegrityError):
-        status_code = 409  # Conflict
-        error_msg = exc.__cause__.args[0].split(" ")[0]
-    elif isinstance(exc, NinjaValidationError):
-        status_code = 422
-        error_msg = exc.errors[0]["msg"]
-    elif isinstance(exc, PermissionDenied):
-        status_code = 403
-    elif isinstance(exc, ObjectDoesNotExist):
-        status_code = 404
-    elif isinstance(exc, AuthenticationError):
-        status_code = 401
+    match exc:
+        case SeeyaApiError(detail, code):
+            status_code = code
+        case DjangoValidationError():
+            status_code = 400
+            error_msg = exc.message
+        case IntegrityError():
+            status_code = 409  # Conflict
+            error_msg = exc.__cause__.args[0].split(" ")[0]
+        case NinjaValidationError():
+            status_code = 422
+            error_msg = exc.errors[0]["msg"]
+        case PermissionDenied():
+            status_code = 403
+            error_msg = "권한이 없습니다."
+        case ObjectDoesNotExist():
+            status_code = 404
+            error_msg = "요청한 리소스를 찾을 수 없습니다."
+        case AuthenticationError():
+            status_code = 401
+            error_msg = "인증이 필요합니다."
+        case _:
+            status_code = 500
+            error_msg = "알 수 없는 에러가 발생했습니다."
+            logger.error(f"Unhandled exception: {str(exc)}")
 
     response = ErrorResponseSchema(
         success=False,
