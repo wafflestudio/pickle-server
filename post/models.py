@@ -1,12 +1,16 @@
 from django.contrib.auth import get_user_model
 from django.db import models
 
+from base.upload import upload_to_func
+
 User = get_user_model()
 
 
 class Post(models.Model):
     text = models.TextField(blank=True)
-    image = models.ImageField(upload_to="post_images", blank=True, null=True)
+    image = models.ImageField(
+        upload_to=upload_to_func("post_images"), blank=True, null=True
+    )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
     author = models.ForeignKey(User, on_delete=models.CASCADE, related_name="posts")
