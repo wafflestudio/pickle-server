@@ -11,11 +11,14 @@ ALLOWED_HOSTS = [
 
 CSRF_TRUSTED_ORIGINS = ALLOWED_HOSTS
 CSRF_COOKIE_DOMAIN = ".wafflestudio.com"
+CSRF_COOKIE_SECURE = True
+SESSION_COOKIE_SECURE = True
 
 CORS_ORIGIN_WHITELIST = [
     "https://seeya.wafflestudio.com",
     "http://localhost:5173",
 ]
+CORS_ALLOW_CREDENTIALS = True
 
 DATABASES = {
     "default": {
