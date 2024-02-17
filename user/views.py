@@ -2,6 +2,7 @@ from django.contrib.auth import authenticate, login, logout
 from ninja import File, Form, Router
 from ninja.errors import AuthenticationError
 from ninja.files import UploadedFile
+from openai.resources.beta.threads import runs
 
 from user.models import User
 from user.schemas import UserCreateIn, UserLoginIn, UserSchema
@@ -68,3 +69,23 @@ def post_logout(request):
 @router.get("/me", response={200: UserSchema})
 def get_user_me(request):
     return request.user
+
+
+@router.post(
+    "/timetable",
+)
+def post_timetable(request, image: UploadedFile = File(...)):
+    from user.utils import run
+    from PIL import Image
+
+    input_bytes = image.read()
+    output_image: Image = run(input_bytes)
+
+    # save image to file
+    output_image.save("output.png")
+
+    image_bytes = output_image.tobytes()
+
+    from django.http import HttpResponse
+
+    return HttpResponse(image_bytes, content_type="image/png")
