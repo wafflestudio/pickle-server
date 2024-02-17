@@ -16,7 +16,7 @@ router = Router(tags=["challenge"])
 
 
 @router.post(
-    "",
+    "/",
     response={
         201: ChallengeResponseSchema,
         frozenset((403, 404)): ErrorResponseSchema,

@@ -3,7 +3,7 @@ from typing import List
 from django.core.exceptions import PermissionDenied
 from django.db import transaction
 from django.db.models import Prefetch
-from ninja import File, Router
+from ninja import File, Form, Router
 from ninja.files import UploadedFile
 from ninja.pagination import paginate
 
@@ -16,10 +16,12 @@ router = Router(tags=["post"])
 
 
 @router.post(
-    "/create",
+    "/",
     response={200: PostSchema},
 )
-def post_create(request, params: PostCreateSchema, image: UploadedFile = File(...)):
+def post_create(
+    request, params: Form[PostCreateSchema], image: UploadedFile = File(...)
+):
     user = request.user
     post = Post.objects.create(
         text=params.text,

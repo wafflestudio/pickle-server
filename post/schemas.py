@@ -1,10 +1,13 @@
 from datetime import datetime
+from decimal import Decimal
 
 from ninja import Schema
 
 
 class PostCreateSchema(Schema):
     text: str
+    latitude: Decimal
+    longitude: Decimal
 
 
 class PostSchema(Schema):

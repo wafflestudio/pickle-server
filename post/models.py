@@ -21,15 +21,17 @@ class Post(models.Model):
     like_count = models.IntegerField(default=0)
     latitude = models.DecimalField(
         _("latitude"),
-        null=True,
+        null=False,
         max_digits=9,
         decimal_places=6,
+        default="21.89975",
     )
     longitude = models.DecimalField(
         _("longitude"),
-        null=True,
+        null=False,
         max_digits=9,
         decimal_places=6,
+        default="168.38367",
     )
 
     class Meta:
