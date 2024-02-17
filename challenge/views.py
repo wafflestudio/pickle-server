@@ -1,4 +1,5 @@
 from datetime import datetime
+from decimal import Decimal
 from http import HTTPStatus
 
 from django.http import HttpRequest
@@ -13,8 +14,8 @@ router = Router(tags=["challenge"])
 
 
 class CoordinateSchema(Schema):
-    latitude: str
-    longitude: str
+    latitude: Decimal
+    longitude: Decimal
 
 
 class AcceptChallengeSchema(Schema):
@@ -48,7 +49,7 @@ def accept_challenge(request: HttpRequest, body: AcceptChallengeSchema):
             "자신의 게시물에는 도전할 수 없습니다.", HTTPStatus.FORBIDDEN
         )
 
-    challenge, created = Challenge.objects.get_or_create(user=user.id, post=post)
+    challenge, created = Challenge.objects.get_or_create(user=user, post=post)
 
     if not created:
         raise SeeyaApiError("이미 도전 중인 챌린지입니다.", HTTPStatus.FORBIDDEN)
