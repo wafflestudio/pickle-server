@@ -91,7 +91,9 @@ def post_like(request, post_id: int):
 )
 def get_post_challenges(request, post_id: int):
     post = Post.objects.get(id=post_id)
-    challenges = post.accepted_users.all().order_by("-similarity")
+    challenges = (
+        post.accepted_users.all().prefetch_related("user").order_by("-similarity")
+    )
     return challenges[:3]
 
 

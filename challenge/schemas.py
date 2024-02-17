@@ -17,11 +17,16 @@ class ChallengeAcceptSchema(Schema):
 
 class ChallengeSimpleSchema(Schema):
     id: int
+    username: str
     coordinate: CoordinateSchema
     start_time: datetime
     image: Optional[str]
     similarity: Optional[int]
     result: Optional[str]
+
+    @staticmethod
+    def resolve_username(obj):
+        return obj.user.username
 
     @staticmethod
     def resolve_coordinate(obj):
