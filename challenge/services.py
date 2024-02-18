@@ -89,7 +89,9 @@ show output similarity after `similarity:`. after that, add 2~3 sentence descrip
         f"challenge_id: {challenge_id}, similarity: {similarity}, result: {result}"
     )
 
-    await sync_to_async(save_challenge_result(challenge_id, similarity, result))
+    await sync_to_async(save_challenge_result)(
+        challenge_id=challenge_id, similarity=similarity, result=result
+    )
 
 
 def save_challenge_result(challenge_id: int, similarity: int, result: str):
