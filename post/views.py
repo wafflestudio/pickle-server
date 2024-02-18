@@ -104,7 +104,7 @@ def get_post_challenges(request, post_id: int):
 @paginate(CursorPagination)
 def post_list(request, latitude: float, longitude: float):
     return (
-        Post.filter_with_distance(latitude, longitude, 10000)
+        Post.filter_with_distance(latitude, longitude, 20000)
         .order_by("distance")
         .prefetch_related(
             "author",
