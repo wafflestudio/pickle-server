@@ -3,7 +3,6 @@ from django.db import transaction
 from ninja import File, Form, Router
 from ninja.errors import AuthenticationError
 from ninja.files import UploadedFile
-from openai.resources.beta.threads import runs
 
 from user.models import TimeTable, User
 from user.schemas import UserCreateIn, UserLoginIn, UserSchema
@@ -79,6 +78,8 @@ def get_user_me(request):
 def post_timetable(request, image: UploadedFile = File(...)):
     from user.utils import run
     from PIL import Image
+    
+    # resize image
 
     timetable = TimeTable.objects.create(original_image=image)
     output_image: Image = run(timetable.original_image.read())

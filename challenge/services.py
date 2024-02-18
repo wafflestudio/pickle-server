@@ -39,7 +39,7 @@ Similaity should be measured by following priority.
 1. same place or object
 2. same background
 Time, weather, small objects, and people can be ignored if images are representing same place or object.
-show similarity after `similarity:`. add 2~3 sentence description of second image's characteristic and reasoning for the similarity after `result:`. do not mention `두 번째` in output. response should use friendly, casual tone, and use `~해요`체.
+show output similarity after `similarity:`. after that, add 2~3 sentence description of second image's characteristic and reasoning for the similarity after `result:`. do not mention `두 번째` in output. response should use friendly, casual tone, and use `~해요`체.
     """
 
     def image_dict(encoded_image, resize: int = 768):
