@@ -18,3 +18,22 @@ class User(AbstractUser):
 
     email = models.EmailField(_("email address"), unique=True)
     image = models.ImageField(upload_to=upload_to_func, blank=True, null=True)
+
+
+def upload_to_func_timetable(instance, filename):
+    prefix = "uploads/timetable_images/"
+    return prefix + convert_filename(filename)
+
+
+def upload_to_func_timetable_result(instance, filename):
+    prefix = "uploads/timetable_images_result/"
+    return prefix + convert_filename(filename)
+
+
+class TimeTable(models.Model):
+    original_image = models.ImageField(
+        upload_to=upload_to_func_timetable, blank=True, null=True
+    )
+    result_image = models.ImageField(
+        upload_to=upload_to_func_timetable_result, blank=True, null=True
+    )

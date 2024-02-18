@@ -1,10 +1,11 @@
 from django.contrib.auth import authenticate, login, logout
+from django.db import transaction
 from ninja import File, Form, Router
 from ninja.errors import AuthenticationError
 from ninja.files import UploadedFile
 from openai.resources.beta.threads import runs
 
-from user.models import User
+from user.models import TimeTable, User
 from user.schemas import UserCreateIn, UserLoginIn, UserSchema
 
 router = Router(tags=["user"])
@@ -73,19 +74,18 @@ def get_user_me(request):
 
 @router.post(
     "/timetable",
+    response={200: str},
 )
 def post_timetable(request, image: UploadedFile = File(...)):
     from user.utils import run
     from PIL import Image
 
-    input_bytes = image.read()
-    output_image: Image = run(input_bytes)
+    timetable = TimeTable.objects.create(original_image=image)
+    output_image: Image = run(timetable.original_image.read())
 
-    # save image to file
-    output_image.save("output.png")
+    import io
 
-    image_bytes = output_image.tobytes()
-
-    from django.http import HttpResponse
-
-    return HttpResponse(image_bytes, content_type="image/png")
+    output_image_bytes = io.BytesIO()
+    output_image.save(output_image_bytes, format="PNG")
+    timetable.result_image.save("result.png", output_image_bytes)
+    return timetable.result_image.url

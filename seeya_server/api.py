@@ -14,7 +14,7 @@ api.add_router("challenge/", challenge_router)
 from seeya_server.exceptions import api_exception_response
 
 
-@api.exception_handler(Exception)
-def api_exception_handler(request, exc):
-    response, status_code = api_exception_response(request, exc)
-    return api.create_response(request, response, status=status_code)
+# @api.exception_handler(Exception)
+# def api_exception_handler(request, exc):
+#     response, status_code = api_exception_response(request, exc)
+#     return api.create_response(request, response, status=status_code)
