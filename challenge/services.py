@@ -7,6 +7,7 @@ from openai import AsyncClient
 from openai.types.chat import ChatCompletionChunk
 
 from django.conf import settings
+from asgiref.sync import sync_to_async
 from challenge.models import Challenge, ChallengeStatus
 
 logger = logging.getLogger(__name__)
@@ -88,7 +89,7 @@ show output similarity after `similarity:`. after that, add 2~3 sentence descrip
         f"challenge_id: {challenge_id}, similarity: {similarity}, result: {result}"
     )
 
-    save_challenge_result(challenge_id, similarity, result)
+    await sync_to_async(save_challenge_result(challenge_id, similarity, result))
 
 
 def save_challenge_result(challenge_id: int, similarity: int, result: str):
@@ -99,4 +100,7 @@ def save_challenge_result(challenge_id: int, similarity: int, result: str):
         challenge.status = ChallengeStatus.COMPLETED
         challenge.save()
     except Exception as e:
-        pass
+        import traceback
+
+        traceback.print_exc()
+        print(e)
