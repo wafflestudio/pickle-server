@@ -70,10 +70,10 @@ class Post(models.Model):
             cls.objects
             # 빠른 계산을 위해 위경도로 적당히 계산합니다.
             .filter(
-                # latitude__lte=latitude + approx_lat,
-                # latitude__gte=latitude - approx_lat,
-                # longitude__lte=longitude + approx_long,
-                # longitude__gte=longitude - approx_long,
+                latitude__lte=latitude + approx_lat,
+                latitude__gte=latitude - approx_lat,
+                longitude__lte=longitude + approx_long,
+                longitude__gte=longitude - approx_long,
             )
             .annotate(distance=distance_in_meter_query)
             .filter(distance__lte=within)

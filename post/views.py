@@ -113,7 +113,7 @@ def post_list(request, latitude: float, longitude: float):
                 queryset=request.user.likes.all(),
                 to_attr="_user_likes_post",
             ),
-        )[:2]
+        )
     )
 
 
